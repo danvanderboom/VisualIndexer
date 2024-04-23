@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks.Dataflow;
 using SkiaSharp;
 
 namespace VisualIndexer;
@@ -103,32 +102,6 @@ public class Indexer
                 Typeface = SKTypeface.FromFamilyName("Arial", SKFontStyle.Bold)
             };
 
-            // Draw grid lines and text
-            for (int row = 0; row <= grid.Rows; row++)
-            {
-                int y = row * grid.CellHeight + ColumnIdentifierHeight;
-                canvas.DrawLine(RowIdentifierWidth, y, imageWidth, y, linePaint);
-            }
-
-            for (int col = 0; col <= grid.Columns; col++)
-            {
-                int x = col * grid.CellWidth + RowIdentifierWidth;
-                canvas.DrawLine(x, ColumnIdentifierHeight, x, imageHeight, linePaint);
-            }
-
-            // Draw row numbers and column letters
-            for (int row = 1; row <= grid.Rows; row++)
-            {
-                var text = row.ToString();
-                canvas.DrawText(text, RowIdentifierWidth / 2, row * grid.CellHeight + ColumnIdentifierHeight - grid.CellHeight / 2 + textPaint.TextSize / 2, textPaint);
-            }
-
-            for (int col = 1; col <= grid.Columns; col++)
-            {
-                var text = Convert.ToChar('A' + col - 1).ToString();
-                canvas.DrawText(text, col * grid.CellWidth + RowIdentifierWidth - grid.CellWidth / 2, ColumnIdentifierHeight - 20, textPaint);
-            }
-
             // insert images in grid
             for (int i = 0; i < images.Count; i++)
             {
@@ -142,6 +115,33 @@ public class Indexer
 
                 // Resize and draw the image
                 canvas.DrawBitmap(images[i], images[i].Info.Rect, destRect);
+            }
+
+            // draw horizontal lines
+            for (int row = 0; row <= grid.Rows; row++)
+            {
+                int y = row * grid.CellHeight + ColumnIdentifierHeight;
+                canvas.DrawLine(0, y, imageWidth, y, linePaint);
+            }
+
+            // draw vertical lines
+            for (int col = 0; col <= grid.Columns; col++)
+            {
+                int x = col * grid.CellWidth + RowIdentifierWidth;
+                canvas.DrawLine(x, 0, x, imageHeight, linePaint);
+            }
+
+            // Draw row numbers and column letters
+            for (int row = 1; row <= grid.Rows; row++)
+            {
+                var text = row.ToString();
+                canvas.DrawText(text, RowIdentifierWidth / 2, row * grid.CellHeight + ColumnIdentifierHeight - grid.CellHeight / 2 + textPaint.TextSize / 2, textPaint);
+            }
+
+            for (int col = 1; col <= grid.Columns; col++)
+            {
+                var text = Convert.ToChar('A' + col - 1).ToString();
+                canvas.DrawText(text, col * grid.CellWidth + RowIdentifierWidth - grid.CellWidth / 2, ColumnIdentifierHeight - 20, textPaint);
             }
         }
 
