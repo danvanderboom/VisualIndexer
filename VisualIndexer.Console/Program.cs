@@ -25,7 +25,7 @@ var random = new Random();
 
 var indexer = new Indexer();
 
-var pageBatchSize = 4;
+var pageBatchSize = 12;
 var batchIndex = 0;
 
 await ProcessPdfPageBatches(documentPath, pageBatchSize, async batch =>
