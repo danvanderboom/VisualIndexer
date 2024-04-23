@@ -22,6 +22,9 @@ var testImages = GenerateRandomColorBitmaps(pageCount, fullImageWidth, fullImage
 
 var layout = indexer.CalculateGridLayout(pageCount, fullImageWidth, fullImageHeight);
 
+var gridMap = indexer.CreateMapOfGridCellsToPages(startPage: 1, pageCount: pageCount, layout.Rows, layout.Columns);
+Console.WriteLine($"Grid cell B3 = page {gridMap["B2"]}");
+
 var grid = indexer.CreatePageGridImage(layout, testImages);
 
 // save grid image

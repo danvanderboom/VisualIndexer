@@ -147,4 +147,27 @@ public class Indexer
 
         return bitmap;
     }
+
+    public Dictionary<string, int> CreateMapOfGridCellsToPages(int startPage, int pageCount, int rowCount, int columnCount)
+    {
+        var cellToPageMap = new Dictionary<string, int>();
+
+        int currentPage = startPage;
+        int maxPages = startPage + pageCount - 1; // the last page that will be mapped
+
+        for (int row = 0; row < rowCount; row++)
+        {
+            for (int col = 0; col < columnCount; col++)
+            {
+                if (currentPage > maxPages)
+                    break; // stop if all pages are mapped
+
+                string cell = $"{(char)('A' + col)}{row + 1}";
+                cellToPageMap[cell] = currentPage;
+                currentPage++;
+            }
+        }
+
+        return cellToPageMap;
+    }
 }
