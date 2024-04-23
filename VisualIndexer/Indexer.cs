@@ -148,7 +148,7 @@ public class Indexer
         return bitmap;
     }
 
-    public Dictionary<string, int> CreateMapOfGridCellsToPages(int startPage, int pageCount, int rowCount, int columnCount)
+    public Dictionary<string, int> CreateGridCellToPageMap(int startPage, int pageCount, int rowCount, int columnCount)
     {
         var cellToPageMap = new Dictionary<string, int>();
 
@@ -169,5 +169,30 @@ public class Indexer
         }
 
         return cellToPageMap;
+    }
+
+    public Dictionary<int, string> CreatePageToGridCellMap(int startPage, int pageCount, int rowCount, int columnCount)
+    {
+        var gridCellToPageMap = CreateGridCellToPageMap(startPage, pageCount, rowCount, columnCount);
+
+        var invertedMap = new Dictionary<int, string>();
+
+        foreach (var entry in gridCellToPageMap)
+        {
+            if (!invertedMap.ContainsKey(entry.Value))
+            {
+                invertedMap.Add(entry.Value, entry.Key);
+            }
+            else
+            {
+                // Handle the scenario where a page number is already in the map.
+                // This could happen if there's an error in input mapping or 
+                // if multiple cells are intentionally mapped to the same page.
+                // Depending on requirements, this could be an exception or a merge strategy.
+                throw new InvalidOperationException($"Duplicate page number detected: {entry.Value}");
+            }
+        }
+
+        return invertedMap;
     }
 }

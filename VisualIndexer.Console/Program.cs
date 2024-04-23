@@ -14,7 +14,7 @@ var random = new Random();
 
 var indexer = new Indexer();
 
-var pageCount = 12;
+var pageCount = 9;
 var fullImageWidth = 600;
 var fullImageHeight = 800;
 
@@ -22,10 +22,10 @@ var testImages = GenerateRandomColorBitmaps(pageCount, fullImageWidth, fullImage
 
 var layout = indexer.CalculateGridLayout(pageCount, fullImageWidth, fullImageHeight);
 
-var gridMap = indexer.CreateMapOfGridCellsToPages(startPage: 1, pageCount: pageCount, layout.Rows, layout.Columns);
-DisplayPageNumberForCellId("A1");
-DisplayPageNumberForCellId("E1");
-DisplayPageNumberForCellId("C2");
+// test grid cell map, random page generation, and page-to-cell mapping
+var gridCellToPageMap = indexer.CreateGridCellToPageMap(startPage: 1, pageCount: pageCount, layout.Rows, layout.Columns);
+for (int i = 0; i < 5; i++)
+    DisplayPageNumberForCellId(GetRandomGridCell(layout, pageCount));
 
 var grid = indexer.CreatePageGridImage(layout, testImages);
 
@@ -47,7 +47,7 @@ Console.WriteLine("Spreadsheet grid image has been created.");
 
 void DisplayPageNumberForCellId(string cellId)
 {
-    Console.WriteLine($"Grid cell {cellId} = page {gridMap[cellId]}");
+    Console.WriteLine($"Grid cell {cellId} = page {gridCellToPageMap[cellId]}");
 }
 
 List<SKBitmap> GenerateRandomColorBitmaps(int count, int width, int height)
@@ -79,3 +79,9 @@ List<SKBitmap> GenerateRandomColorBitmaps(int count, int width, int height)
     return bitmaps;
 }
 
+string GetRandomGridCell(GridLayout layout, int totalNumberOfPages)
+{
+    var page = random.Next(totalNumberOfPages + 1);
+    var pageToGridCellMap = indexer.CreatePageToGridCellMap(startPage: 1, pageCount: pageCount, layout.Rows, layout.Columns);
+    return pageToGridCellMap[page];
+}
